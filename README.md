@@ -1,8 +1,8 @@
 # minunit
 
 A working example of a minimalistic unit testing 'framework', adapted from:
-- [*minunit*](http://www.jera.com/techinfo/jtns/jtn003.html), and
-- [*tdd in c*](http://eradman.com/posts/tdd-in-c.html).
+- [*minunit*](http://www.jera.com/techinfo/jtns/jtn003.html) by John Brewer, and
+- [*tdd in c*](http://eradman.com/posts/tdd-in-c.html) by Eric Radman.
 
 Files:
 - `minunit.h` -- the _unit testing 'framework'_.
