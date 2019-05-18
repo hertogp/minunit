@@ -1,4 +1,6 @@
+LIBS=
 CFLAGS=-Wall -pedantic -std=c99
+LDFLAGS= -static ${LIBS}
 
 # builds x, the test runner & runs the test(s)
 all: x test
@@ -16,16 +18,18 @@ x.o: x.h
 x: x.o
 	$(CC) ${CFLAGS} $< -o $@
 
-# runs 'library' x's test runner
+.c.o:
+	$(CC) ${CFLAGS} -c $< -o $@
+
+#  x's test runner
 test: test_x
 	./test_x
 
-# generate test_<name>_mu.h file included in unit test file 'test_<name>.c'
+# generate test_x_mu.h file, to be #include'd in 'test_x.c'
 test_x_mu.h: test_x.c
 	./mu_header test_x
 
-# strips main from x, since test runner will provide main entry point
+# strip main from x, the test runner provides 'main'
 test_x: minunit.h test_x_mu.h test_x.o x.o
 	strip -N main x.o -o x_stripped.o
 	${CC} ${CFLAGS} test_x.o x_stripped.o -o $@
-
