@@ -7,14 +7,16 @@ but still _extremely_ simple.
 Files:
 - `minunit.h` -- the _unit testing 'framework'_.
 - `mu_header` -- a bash script to generate a unit test file's mu-header file.
+
+and as an example:
 - `x.c` -- the 'program' under test.
-- `test_x.c` -- the unit test file for testing x.c.
+- `test_x.c` -- the unit test file for testing `x.c`.
 - `Makefile` -- to build and run the example code.
 
 That's it.
 
 To use it in a (simple) c-project, just:
-- copy `minunit.h`, `mu_header` to the new project
+- copy `minunit.h`,  `mu_header` to the new project
 - write some unit tests in `test_<name>.c`
 - update your `Makefile` with a test target
 and away you go!
@@ -54,4 +56,37 @@ make: *** [test] Error 1
 ```
 
 The `test_x.c` unit test file contains some checks that succeed and some that
-fail.  To remove it again, simply delete the directory.
+fail.  Have a look at what `minunit.h` and `test_x_mu.h` do:
+
+```bash
+gcc -E test_x.c
+```
+
+## unit tests
+
+Using `minunit.h` macros, a unit test looks something like:
+
+```c
+void test_xyz(void)
+{
+    int a=1, b=1;
+
+    // these all fail
+    mu_assert(summ(a,b) == 3);
+    mu_equal(summ(a,b), 3, "a+b really should equal %d!!", 3);
+    mu_eq(summ(a,b), 3, "%d");
+    mu_true(summ(a,b) == 3);
+    mu_false(summ(a,b) == 2);
+}
+```
+
+which yields the output:
+
+```bash
+$ make
+test_x.c:25 (test_xyz) assertion error 'summ(a,b) == 3'
+test_x.c:26 (test_xyz) a+b really should equal 3!!
+test_x.c:27 (test_xyz) expected 2, got 3
+test_x.c:28 (test_xyz) expected 'summ(a,b) == 3' to be true
+test_x.c:29 (test_xyz) expected 'summ(a,b) == 2' to be false
+```

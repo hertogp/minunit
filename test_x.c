@@ -12,15 +12,22 @@
 
 void test_xyz(void)
 {
-    mu_equal(1+1, 2, "1+1 really should equal %d", 2);
-    mu_assert(1+1 == 2);
-    mu_true(1+1 == 2);
-    mu_false(1+1 == 3);
+    int a=1, b=1;
 
-    mu_equal(1+1, 3, "1+1 really should equal %d", 2);
-    mu_assert(1+1 == 3);
-    mu_true(1+1 == 3);
-    mu_false(1+1 == 2);
+    // these succeed
+    mu_assert(a+b == 2);
+    mu_equal(a+b, 2, "1+1 really should equal %d", 2);
+    mu_eq(a+b, 2, "%d");
+    mu_true(a+b == 2);
+    mu_false(a+b == 3);
+
+    // these fail
+    mu_assert(summ(a,b) == 3);
+    mu_equal(summ(a,b), 3, "a+b really should equal %d!!", 3);
+    mu_eq(summ(a,b), 3, "%d");
+    mu_true(summ(a,b) == 3);
+    mu_false(summ(a,b) == 2);
+
 }
 
 void
