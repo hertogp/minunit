@@ -2,7 +2,8 @@
 # project ignores
 x
 test_x
-test_x_mu.h
+test_x_2
+*_mu.h
 *.pdf
 _notes.md
 scr/

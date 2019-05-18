@@ -27,7 +27,7 @@ char *MU_FUNC=NULL;
 #define MU_DONE() \
     do { \
         printf("-------------------------------------\n"); \
-        printf("Ran %d tests -> ok (%d), fail (%d)\n", \
+        printf("Ran %d tests -> ok (%d), fail (%d)\n\n", \
              mu_tests_run, mu_tests_ok, mu_tests_nok); \
         return (mu_tests_run != mu_tests_ok); \
     } while(0)
