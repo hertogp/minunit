@@ -68,13 +68,15 @@ gcc -E test_x.c
 
 ## unit tests
 
-The following test function shows all the test macro's in action:
+The following is a complete unit test file with 1 test function, using
+all mu test macros..
 
 ```c
 // file test_x.c
 
-#include "x.h"
-#include "test_x_mu.h"
+#include "x.h"              // unit under test (provides summ)
+#include "minunit.h"        // provides mu test macros
+#include "test_x_mu.h"      // provides main and the test runner
 
 void test_xyz(void)
 {
@@ -83,30 +85,45 @@ void test_xyz(void)
     // these all fail
     mu_assert(summ(a,b) == 3);
     mu_equal(summ(a,b), 3, "a+b really should equal %d!!", 3);
-    mu_eq(summ(a,b), 3, "%d");
+    mu_eq(3, summ(a,b), "%d");
     mu_true(summ(a,b) == 3);
     mu_false(summ(a,b) == 2);
 }
+
+// other tests ...
+
+// Note: no main here (see test_x_mu.h)
 ```
 
-which yields the output:
+running this yields:
 
 ```bash
 $ make
-test_x.c:25 (test_xyz) assertion error 'summ(a,b) == 3'
-test_x.c:26 (test_xyz) a+b really should equal 3!!
-test_x.c:27 (test_xyz) expected 2, got 3
-test_x.c:28 (test_xyz) expected 'summ(a,b) == 3' to be true
-test_x.c:29 (test_xyz) expected 'summ(a,b) == 2' to be false
+./test_x
+test_x.c:12: test_xyz - assertion error 'summ(a,b) == 3'
+test_x.c:13: test_xyz - a+b really should equal 3!!
+test_x.c:14: test_xyz - expected 3, got 2
+test_x.c:15: test_xyz - expected 'summ(a,b) == 3' to be true
+test_x.c:16: test_xyz - expected 'summ(a,b) == 2' to be false
+<snip other tests>
+-------------------------------------
+Ran 17 tests -> ok (6), fail (11)
+Makefile:26: recipe for target 'test' failed
+make: *** [test] Error 1
 ```
 
 ## Makefile
 
-Because `x.c` contains a `main`, the Makefile creates a stripped version of
-`x.o` with main removed, so it can be supplied by the test runner via its
-generated `test_x_mu.h` header file.
+The Makefile runs `mu_header` to create `test_x_mu.h` for the unit test file
+`test_x.c` and, because `x.c` contains a `main`, it also creates a stripped
+version of `x.o` with main removed since that's provided by the header
+generated earlier.
 
 ```make
+# generate test_x_mu.h file, to be #include'd in 'test_x.c'
+test_x_mu.h: test_x.c
+	./mu_header test_x
+
 # strip main from x, the test runner provides 'main'
 test_x: minunit.h test_x_mu.h test_x.o x.o
 	strip -N main x.o -o x_stripped.o
