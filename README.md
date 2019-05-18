@@ -5,18 +5,18 @@ A working example of [*minunit*](http://www.jera.com/techinfo/jtns/jtn003.html)
 but still _extremely_ simple.
 
 Files:
-- minunit.h, the _unit testing 'framework'_.
-- mu\_header, bash script to generate a unit test file's mu-header file.
-- x.c, the 'program' under test.
-- test\_x.c, the unit test file for testing x.c.
-- Makefile, to build and run the example code.
+- `minunit.h` -- the _unit testing 'framework'_.
+- `mu_header` -- a bash script to generate a unit test file's mu-header file.
+- `x.c` -- the 'program' under test.
+- `test_x.c` -- the unit test file for testing x.c.
+- `Makefile` -- to build and run the example code.
 
 That's it.
 
 To use it in a (simple) c-project, just:
-- copy minunit.h, mu\_header to the new project
-- write some unit tests in test\_\<name>.c
-- update your Makefile with a test target
+- copy `minunit.h`, `mu_header` to the new project
+- write some unit tests in `test_<name>.c`
+- update your `Makefile` with a test target
 and away you go!
 
 
