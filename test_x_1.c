@@ -1,8 +1,8 @@
 // file: test_x.c -- a (minunit) test file for 'x.c'
 
-#include "x.h"         // unit under test
-#include "minunit.h"   // provides mu test macros
-#include "test_x_mu.h" // provides main and the test runner
+#include "x.h"            // unit under test
+#include "minunit.h"      // provides mu test macros
+#include "test_x_1_mu.h"  // provides main and the test runner
 
 void test_xyz(void)
 {

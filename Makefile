@@ -32,12 +32,11 @@ ${TEST}: ${TEST}.o
 # run *all* test runners
 # - remove the ';' to stop make'ing after a test runner fails
 test: $(test_runners)
-	@echo ">> testrunners $(test_runners)"
 	@$(foreach test, $(test_runners), ./$(test);)
 
 # `make just_test_<name>', runs a single test_<name>
 $(test_runners:%=just_%): just_%: %
-	-./$^
+	-./$<
 
 # generate test_x_mu.h file, to be #include'd in 'test_x.c'
 # test_x_mu.h: test_x.c
