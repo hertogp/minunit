@@ -53,3 +53,8 @@ Makefile:21: recipe for target 'test' failed
 make: *** [test] Error 1
 ```
 
+To remove:
+
+```bash
+rm -f ~/topdir/minunit
+```
