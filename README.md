@@ -53,8 +53,5 @@ Makefile:21: recipe for target 'test' failed
 make: *** [test] Error 1
 ```
 
-To remove:
-
-```bash
-rm -f ~/topdir/minunit
-```
+The `test_x.c` unit test file contains some checks that succeed and some that
+fail.  To remove it again, simply delete the directory.
