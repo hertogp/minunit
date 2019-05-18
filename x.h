@@ -1,0 +1,1 @@
+int summ(int, int);

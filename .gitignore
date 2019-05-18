@@ -1,3 +1,9 @@
+# minut example
+# ignore these binaries
+x
+test_x
+*.pdf
+
 # Prerequisites
 *.d
 
