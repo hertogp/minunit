@@ -1,8 +1,8 @@
 # minunit
 
 A working example of [*minunit*](http://www.jera.com/techinfo/jtns/jtn003.html)
-, a minimalist unit testing 'framework' for C programs.  Slightly modified but
-still _extremely_ simple.
+, a minimalistic unit testing 'framework' for C programs. Slightly modified,
+but still _extremely_ simple.
 
 Files:
 - minunit.h, the _unit testing 'framework'_.
