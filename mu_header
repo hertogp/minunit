@@ -1,5 +1,6 @@
 #!/bin/bash
 # :vim:ft=SH:
+# file mu_header
 
 usage() {
     echo "Usage:"
@@ -50,6 +51,7 @@ fi
 # - pickup the test_<functions> from the source file
 
 FUNCS=$(sed -ne '/^\(void\s\+\)\?\(test_\S\+\)/!d; s/^void\s\+//; s/(\s*void\s*)//; p' ${SRC});
+
 # for match in ${FUNCS[*]}
 # do
 #     echo "-> $match"

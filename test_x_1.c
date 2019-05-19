@@ -1,4 +1,4 @@
-// file: test_x.c -- a (minunit) test file for 'x.c'
+// file: test_x_1.c -- a (minunit) test file for 'x.c'
 
 #include "x.h"            // unit under test
 #include "minunit.h"      // provides mu test macros
