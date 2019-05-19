@@ -66,4 +66,3 @@ $(test_hfiles): %_mu.h: %.c
 $(test_runners): %: minunit.h %_mu.h %.o ${TEST}.o
 	strip -N main ${TEST}.o -o ${TEST}_stripped.o
 	${CC} ${CFLAGS} $@.o ${TEST}_stripped.o -o $@
-

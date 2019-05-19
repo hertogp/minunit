@@ -24,5 +24,5 @@ void test_xyz(void)
 
 }
 
-// Note: no main here (see test_x_mu.h)
+// Note: no main here (see test_x_1_mu.h)
 // - just write the test_functions ...
