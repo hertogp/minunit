@@ -6,17 +6,15 @@ MINOR=0.1
 VERSION=$(MAJOR).$(MINOR)
 TGT=lib$(LIB).so.$(VERSION)
 
-# dirs used
-
 SDIR=src
 UDIR=src/tst
 TDIR=tst
 BDIR=bld
 
-# tools used
 GRIND= /usr/bin/valgrind
 VGOPT= --leak-check=yes
 RM=/bin/rm
+
 SRCS=$(sort $(wildcard src/*.c))
 OBJS=$(SRCS:src/%.c=bld/%.o)
 
@@ -60,7 +58,6 @@ MU_R=$(MU_T:%=tst/%)
 # run all unit tests (remove the ; to stop at first error)
 test: $(MU_R)
 	@$(foreach runner, $(MU_R), $(GRIND) $(VGOPT) ./$(runner);)
-	#@$(foreach runner, $(MU_R), valgrind --leak-check=yes ./$(runner);)
 
 # run a single unit test
 $(MU_T): %: $(TDIR)/%

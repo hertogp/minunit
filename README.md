@@ -153,10 +153,11 @@ Error messages are formatted as: `file:line: <test_func_name> - msg`.
 
 # Makefile
 
-If valgrind is not available, remove the `valgrind --leak-check=yes` from:
+If valgrind is not available, either remove the `$(GRIND) $(VGOPT)` part or
+set those to be emtpy.
 
 ```Make
 # run all unit tests (remove the ; to stop at first error)
 test: $(MU_R)
-	@$(foreach runner, $(MU_R), valgrind --leak-check=yes ./$(runner);)
+	@$(foreach runner, $(MU_R), $(GRIND) $(VGOPT) ./$(runner);)
 ```
