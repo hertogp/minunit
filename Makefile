@@ -44,7 +44,7 @@ $(BDIR)/$(TGT): $(OBJS)
 	@ln -sf $(TGT) $(@:.$(MINOR)=)
 
 #
-# MINUT
+# MINUNIT
 #
 MU_C=$(sort $(wildcard src/tst/test_*.c))
 MU_T=$(MU_C:src/tst/%.c=%)
