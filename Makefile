@@ -29,7 +29,7 @@ LFLAGS=  -fPIC -shared -Wl,-soname=$(TGT:.$(MINOR)=)
 
 # create (sub)dir and marker file .f
 %/.f:
-	@mkdir -p $(dir $@)
+	@mkdir -p $*
 	@touch $@
 
 .SECONDEXPANSION:
