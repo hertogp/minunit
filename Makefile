@@ -27,7 +27,7 @@ LFLAGS=  -fPIC -shared -Wl,-soname=$(TGT:.$(MINOR)=)
 .PHONY: test clean
 .PRECIOUS: %/.f
 
-# create (sub)dir and marker file .f
+# create subdir and place a precious marker file .f
 %/.f:
 	@mkdir -p $*
 	@touch $@
@@ -37,7 +37,7 @@ LFLAGS=  -fPIC -shared -Wl,-soname=$(TGT:.$(MINOR)=)
 $(BDIR)/%.o: $(SDIR)/%.c $$(@D)/.f
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# build libipt.so.VERSION & its symlinks
+# build libx.so.VERSION (soname=libx.so.MAJOR) & symlink libx.so, libx.so.MAJOR
 $(BDIR)/$(TGT): $(OBJS)
 	$(CC) $(LFLAGS) $^ -o $@
 	@ln -sf $(TGT) $(@:.$(VERSION)=)
@@ -60,17 +60,17 @@ test: $(MU_R)
 $(MU_T): %: $(TDIR)/%
 	@valgrind --leak-check=yes ./$<
 
-# build a unit test's mu-header
+# build a unit test file's mu-header
 $(MU_H): $(BDIR)/%_mu.h: $(UDIR)/%.c $$(@D)/.f
 	$(SDIR)/mu_header.sh $< $@
 
-# build a unit test's obj file
+# build a unit test's object file
 $(MU_O): $(BDIR)/%.o: $(UDIR)/%.c $(BDIR)/%_mu.h $(SDIR)/minunit.h
 	$(CC) -I$(BDIR) -I$(SDIR) $(CFLAGS) -o $@ -c $<
 
-# build a unit test runner
+# build a unit test runner & link against libx (the -lx)
 $(MU_R): $(TDIR)/%: $(BDIR)/%.o $(BDIR)/$(TGT) $$(@D)/.f
-	$(CC) -L$(BDIR) -Wl,-rpath,.:$(BDIR) $< -o $@ -lx
+	$(CC) -L$(BDIR) -Wl,-rpath,$(BDIR) $< -o $@ -lx
 
 clean:
 	@$(RM) -f bld/* tst/*

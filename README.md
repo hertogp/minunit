@@ -149,13 +149,11 @@ Makefile:61: recipe for target 'test_x_1' failed
 make: *** [test_x_1] Error 1
 ```
 
-Error messages are formatted along the lines of standard 'efm': `file:line:
-<test_func_name> - msg`.
+Error messages are formatted as: `file:line: <test_func_name> - msg`.
 
 # Makefile
 
-If valgrind is not installed then either install it, or remove the `valgrind
---leak-check=yes` from the following bit:
+If valgrind is not available, remove the `valgrind --leak-check=yes` from:
 
 ```Make
 # run all unit tests (remove the ; to stop at first error)
