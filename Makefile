@@ -1,14 +1,14 @@
-# Makefile for x.so
+# Makefile for lib$(LIB).so
+LIB=x
 MAJOR=1
 MINOR=0.1
 VERSION=$(MAJOR).$(MINOR)
-TGT=libx.so.$(VERSION)
-
+# --------------------------
+TGT=lib$(LIB).so.$(VERSION)
 SDIR=src
 UDIR=src/tst
 TDIR=tst
 BDIR=bld
-SUBDIRS= $(BDIR) $(TDIR)
 
 RM=/bin/rm
 SRCS=$(sort $(wildcard src/*.c))
@@ -70,7 +70,7 @@ $(MU_O): $(BDIR)/%.o: $(UDIR)/%.c $(BDIR)/%_mu.h $(SDIR)/minunit.h
 
 # build a unit test runner & link against libx (the -lx)
 $(MU_R): $(TDIR)/%: $(BDIR)/%.o $(BDIR)/$(TGT) $$(@D)/.f
-	$(CC) -L$(BDIR) -Wl,-rpath,$(BDIR) $< -o $@ -lx
+	$(CC) -L$(BDIR) -Wl,-rpath,$(BDIR) $< -o $@ -l$(LIB)
 
 clean:
 	@$(RM) -f bld/* tst/*
