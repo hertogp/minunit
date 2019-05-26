@@ -52,7 +52,7 @@ MU_H=$(MU_T:%=bld/%_mu.h)
 MU_O=$(MU_T:%=bld/%.o)
 MU_R=$(MU_T:%=tst/%)
 
-# run all unit tests
+# run all unit tests (remove the ; to stop at first error)
 test: $(MU_R)
 	@$(foreach runner, $(MU_R), valgrind --leak-check=yes ./$(runner);)
 
