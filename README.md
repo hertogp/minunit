@@ -134,7 +134,7 @@ src/tst/test_x_1.c:14: test_xyz - expected 3, got 2
 src/tst/test_x_1.c:15: test_xyz - expected 'summ(a,b) == 3' to be true
 src/tst/test_x_1.c:16: test_xyz - expected 'summ(a,b) == 2' to be false
 -------------------------------------
-Ran 10 tests -> ok (5), fail (5)
+Ran 5 tests -> ok (0), fail (5)
 
 ==31477== 
 ==31477== HEAP SUMMARY:
