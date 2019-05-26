@@ -1,12 +1,9 @@
-# minut example
-# project ignores
-x
-test_x_1
-test_x_2
-*_mu.h
-*.pdf
-_notes.md
-scr/
+# iptable
+/tst
+/bld
+/his
+/tmp
+/scr
 
 # Prerequisites
 *.d

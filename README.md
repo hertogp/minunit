@@ -5,22 +5,20 @@ A working example of a minimalistic unit testing 'framework', adapted from:
 - [*tdd in c*](http://eradman.com/posts/tdd-in-c.html) by Eric Radman.
 
 Files:
-- `minunit.h` -- the _unit testing 'framework'_.
-- `mu_header` -- a bash script to generate a unit test file's mu-header file.
+- `src/minunit.h` -- the _unit testing 'framework'_.
+- `src/mu_header.sh` -- bash script to generate a unit test file's mu-header file.
 
 and, as an example:
-- `x.c`        -- the 'program' under test.
-- `test_x_1.c` -- a unit test file for testing `x.c`.
-- `test_x_2.c` -- a second unit test file for testing `x.c`.
-- `Makefile`   -- to build and run the example code.
-
-That's it.
+- `src/x.c`            -- the 'program' under test.
+- `src/tst/test_x_1.c` -- 1st unit test file for testing `src/x.c`.
+- `src/tst/test_x_2.c` -- 2nd unit test file for testing `src/x.c`.
+- `Makefile`           -- to build and run the example code.
 
 To use it in a (simple) c-project, just:
 - copy `minunit.h`,  `mu_header` to the new project
 - write some unit tests in `test_<name>.c`
 - update your `Makefile` with a test target
-and away you go!
+and away you go.
 
 
 ## Try it out
@@ -29,42 +27,12 @@ and away you go!
 cd ~/topdir
 git clone git@github.com:hertogp/minunit.git
 cd minunit
-make
+make test
 ```
 
 Which should yield something along the lines of:
 
 ``` bash
-% make
-cc -Wall -pedantic -std=c99 -c x.c -o x.o
-cc -Wall -pedantic -std=c99 x.o -o x
-./mu_header test_x_1
-cc -Wall -pedantic -std=c99 -c test_x_1.c -o test_x_1.o
-strip -N main x.o -o x_stripped.o
-cc -Wall -pedantic -std=c99 test_x_1.o x_stripped.o -o test_x_1
-./mu_header test_x_2
-cc -Wall -pedantic -std=c99 -c test_x_2.c -o test_x_2.o
-strip -N main x.o -o x_stripped.o
-cc -Wall -pedantic -std=c99 test_x_2.o x_stripped.o -o test_x_2
-test_x_1.c:12: test_xyz - assertion error 'summ(a,b) == 3'
-test_x_1.c:13: test_xyz - a+b really should equal 3!!
-test_x_1.c:14: test_xyz - expected 3, got 2
-test_x_1.c:15: test_xyz - expected 'summ(a,b) == 3' to be true
-test_x_1.c:16: test_xyz - expected 'summ(a,b) == 2' to be false
--------------------------------------
-Ran 10 tests -> ok (5), fail (5)
-
-test_x_2.c:13: test_summ_int - expected 42, got 43
-test_x_2.c:14: test_summ_int - assertion error '42 == answer'
-test_x_2.c:15: test_summ_int - expected '42 == answer' to be true
-test_x_2.c:22: test_summ_float - expected 4.2, got 4.000000 instead
-test_x_2.c:23: test_summ_float - expected 4.2, got 4.0
-test_x_2.c:32: test_summ_mix - expected 41, got 42
--------------------------------------
-Ran 7 tests -> ok (1), fail (6)
-
-Makefile:35: recipe for target 'test' failed
-make: *** [test] Error 1
 ```
 
 Have a look at what `minunit.h` and `test_x_mu.h` do:

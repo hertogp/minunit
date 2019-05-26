@@ -8,7 +8,7 @@ int mu_tests_ok = 0;
 int mu_tests_nok = 0;
 
 // last test function seen
-char *MU_FUNC=NULL;
+const char *MU_FUNC=NULL;
 
 // complain and update stats
 #define MU_FAIL(fmt, ...) \
