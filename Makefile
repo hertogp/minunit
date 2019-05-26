@@ -13,8 +13,6 @@ BDIR=bld
 
 GRIND= /usr/bin/valgrind
 VGOPT= --leak-check=yes
-GRIND=
-VGOPT=
 RM=/bin/rm
 
 SRCS=$(sort $(wildcard src/*.c))
