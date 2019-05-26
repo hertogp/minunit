@@ -153,11 +153,15 @@ Error messages are formatted as: `file:line: <test_func_name> - msg`.
 
 # Makefile
 
-If valgrind is not available, either remove the `$(GRIND) $(VGOPT)` part or
+If valgrind is not available, either remove the `$(GRIND) $(VGOPT)` parts or
 set those to be emtpy.
 
 ```Make
 # run all unit tests (remove the ; to stop at first error)
 test: $(MU_R)
 	@$(foreach runner, $(MU_R), $(GRIND) $(VGOPT) ./$(runner);)
+
+# run a single unit test
+$(MU_T): %: $(TDIR)/%
+	@$(GRIND) $(VGOPT) ./$<
 ```

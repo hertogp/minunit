@@ -13,6 +13,8 @@ BDIR=bld
 
 GRIND= /usr/bin/valgrind
 VGOPT= --leak-check=yes
+GRIND=
+VGOPT=
 RM=/bin/rm
 
 SRCS=$(sort $(wildcard src/*.c))
@@ -61,7 +63,7 @@ test: $(MU_R)
 
 # run a single unit test
 $(MU_T): %: $(TDIR)/%
-	@valgrind --leak-check=yes ./$<
+	@$(GRIND) $(VGOPT) ./$<
 
 # build a unit test file's mu-header
 $(MU_H): $(BDIR)/%_mu.h: $(UDIR)/%.c $$(@D)/.f
