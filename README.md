@@ -154,16 +154,11 @@ Error messages are formatted along the lines of standard 'efm': `file:line:
 
 # Makefile
 
-If valgrind is not installed then either install it, or change the Makefile a
-little:
+If valgrind is not installed then either install it, or remove the `valgrind
+--leak-check=yes` from the following bit:
 
 ```Make
 # run all unit tests (remove the ; to stop at first error)
 test: $(MU_R)
 	@$(foreach runner, $(MU_R), valgrind --leak-check=yes ./$(runner);)
-
-becomes
-
-test: $(MU_R)
-	@$(foreach runner, $(MU_R), ./$(runner);)
 ```
