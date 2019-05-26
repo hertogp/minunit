@@ -1,170 +1,153 @@
 # minunit
 
-A working example of a minimalistic unit testing 'framework', adapted from:
+A working example of a minimalistic C unit testing 'framework', adapted from:
 - [*minunit*](http://www.jera.com/techinfo/jtns/jtn003.html) by John Brewer, and
 - [*tdd in c*](http://eradman.com/posts/tdd-in-c.html) by Eric Radman.
 
-Files:
-- `src/minunit.h` -- the _unit testing 'framework'_.
-- `src/mu_header.sh` -- bash script to generate a unit test file's mu-header file.
+Project setup:
+```bash
+.
+├── bld                   # build dir
+├── LICENSE
+├── Makefile              # assumes valgrind is installed
+├── README.md
+├── src
+│   ├── minunit.h         # minunit test macros
+│   ├── mu_header.sh      # autogenerates unit test file's _mu.h header
+│   ├── tst               # contains the unit test files
+│   │   ├── test_x_1.c
+│   │   └── test_x_2.c
+│   ├── x.c               # code to be tested
+│   └── x.h
+└── tst                   # contains the unit test runners
 
-and, as an example:
-- `src/x.c`            -- the 'program' under test.
-- `src/tst/test_x_1.c` -- 1st unit test file for testing `src/x.c`.
-- `src/tst/test_x_2.c` -- 2nd unit test file for testing `src/x.c`.
-- `Makefile`           -- to build and run the example code.
+5 directories, 9 files
+```
 
-To use it in a (simple) c-project, just:
-- copy `minunit.h`,  `mu_header` to the new project
-- write some unit tests in `test_<name>.c`
-- update your `Makefile` with a test target
-and away you go.
+Running `make`, compiles the `src/*.c` files into `bld/libx.so.1.0.1`, with a
+`-soname=libx.so.1`.  Running `make test` runs all unit tests, compiling the
+`src/tst/test_*.c` files into `tst/test_<t>` executables when needed.
 
+Individual unit tests targets are derived from the unit test c-files, so `make
+test_x_1` would run just that unit test. Finally `make clean` clears both the
+`bld` and `tst` subdirectories.
 
-## Try it out
+Here's the tree after `make test`:
 
 ```bash
-cd ~/topdir
-git clone git@github.com:hertogp/minunit.git
-cd minunit
-make test
+.
+├── bld
+│   ├── libx.so -> libx.so.1.0.1
+│   ├── libx.so.1 -> libx.so.1.0.1
+│   ├── libx.so.1.0.1
+│   ├── test_x_1_mu.h
+│   ├── test_x_1.o
+│   ├── test_x_2_mu.h
+│   ├── test_x_2.o
+│   └── x.o
+├── LICENSE
+├── Makefile
+├── README.md
+├── scr
+├── src
+│   ├── minunit.h
+│   ├── mu_header.sh
+│   ├── tst
+│   │   ├── test_x_1.c
+│   │   └── test_x_2.c
+│   ├── x.c
+│   └── x.h
+└── tst
+    ├── test_x_1
+    └── test_x_2
+
+5 directories, 19 files
 ```
 
-Which should yield something along the lines of:
-
-``` bash
-```
-
-Have a look at what `minunit.h` and `test_x_mu.h` do:
+Minunit test macros only complain on failures, which looks like the following:
 
 ```bash
-gcc -E test_x.c
-```
+% make test
+src/mu_header.sh src/tst/test_x_1.c bld/test_x_1_mu.h
 
-## unit tests
+cc -Ibld -Isrc -std=c99 -O2 -g -Wall -Wextra -Werror -pedantic -fPIC
+-D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -D_DEFAULT_SOURCE
+-Wno-unknown-warning-option -Wold-style-definition -Wstrict-prototypes
+-Wmissing-prototypes -Wpointer-arith -Wmissing-declarations -Wredundant-decls
+-Wnested-externs -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings
+-Wsuggest-attribute=noreturn -Wjump-misses-init -o bld/test_x_1.o -c
+src/tst/test_x_1.c
 
-The following is a complete unit test file with 1 test function, using
-all mu test macros..
+cc -std=c99 -O2 -g -Wall -Wextra -Werror -pedantic -fPIC
+-D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -D_DEFAULT_SOURCE
+-Wno-unknown-warning-option -Wold-style-definition -Wstrict-prototypes
+-Wmissing-prototypes -Wpointer-arith -Wmissing-declarations -Wredundant-decls
+-Wnested-externs -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings
+-Wsuggest-attribute=noreturn -Wjump-misses-init -c src/x.c -o bld/x.o
 
-```c
-// file: test_x_1.c -- a (minunit) test file for 'x.c'
+cc -fPIC -shared -Wl,-soname=libx.so.1 bld/x.o -o bld/libx.so.1.0.1
 
-#include "x.h"            // unit under test
-#include "minunit.h"      // provides mu test macros
-#include "test_x_1_mu.h"  // provides main and the test runner
+cc -Lbld -Wl,-rpath,.:bld bld/test_x_1.o -o tst/test_x_1 -lx
 
-void test_xyz(void)
-{
-    int a=1, b=1;
+src/mu_header.sh src/tst/test_x_2.c bld/test_x_2_mu.h
 
-    // these fail
-    mu_assert(summ(a,b) == 3);
-    mu_equal(summ(a,b), 3, "a+b really should equal %d!!", 3);
-    mu_eq(3, summ(a,b), "%d");
-    mu_true(summ(a,b) == 3);
-    mu_false(summ(a,b) == 2);
+cc -Ibld -Isrc -std=c99 -O2 -g -Wall -Wextra -Werror -pedantic -fPIC
+-D_POSIX_C_SOURCE=200809L -D_GNU_SOURCE -D_DEFAULT_SOURCE
+-Wno-unknown-warning-option -Wold-style-definition -Wstrict-prototypes
+-Wmissing-prototypes -Wpointer-arith -Wmissing-declarations -Wredundant-decls
+-Wnested-externs -Wshadow -Wcast-qual -Wcast-align -Wwrite-strings
+-Wsuggest-attribute=noreturn -Wjump-misses-init -o bld/test_x_2.o -c
+src/tst/test_x_2.c
 
-    // these succeed
-    mu_assert(a+b == 2);
-    mu_equal(a+b, 2, "1+1 really should equal %d", 2);
-    mu_eq(2, a+b, "%d");
-    mu_true(a+b == 2);
-    mu_false(a+b == 3);
+cc -Lbld -Wl,-rpath,.:bld bld/test_x_2.o -o tst/test_x_2 -lx
 
-}
-
-// Note: no main here (see test_x_1_mu.h)
-// - just write the test_functions ...
-```
-
-running just the `test_x_1` unit test, yields:
-
-```bash
-$ make just_test_x_1
-
-./test_x_1
-test_x_1.c:12: test_xyz - assertion error 'summ(a,b) == 3'
-test_x_1.c:13: test_xyz - a+b really should equal 3!!
-test_x_1.c:14: test_xyz - expected 3, got 2
-test_x_1.c:15: test_xyz - expected 'summ(a,b) == 3' to be true
-test_x_1.c:16: test_xyz - expected 'summ(a,b) == 2' to be false
+==30644== Memcheck, a memory error detector
+==30644== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==30644== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==30644== Command: ./tst/test_x_1
+==30644== 
+src/tst/test_x_1.c:12: test_xyz - assertion error 'summ(a,b) == 3'
+src/tst/test_x_1.c:13: test_xyz - a+b really should equal 3!!
+src/tst/test_x_1.c:14: test_xyz - expected 3, got 2
+src/tst/test_x_1.c:15: test_xyz - expected 'summ(a,b) == 3' to be true
+src/tst/test_x_1.c:16: test_xyz - expected 'summ(a,b) == 2' to be false
 -------------------------------------
 Ran 10 tests -> ok (5), fail (5)
 
-Makefile:39: recipe for target 'just_test_x_1' failed
-make: [just_test_x_1] Error 1 (ignored)
+==30644== 
+==30644== HEAP SUMMARY:
+==30644==     in use at exit: 0 bytes in 0 blocks
+==30644==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==30644== 
+==30644== All heap blocks were freed -- no leaks are possible
+==30644== 
+==30644== For counts of detected and suppressed errors, rerun with: -v
+==30644== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+==30645== Memcheck, a memory error detector
+==30645== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==30645== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==30645== Command: ./tst/test_x_2
+==30645== 
+src/tst/test_x_2.c:13: test_summ_int - expected 42, got 43
+src/tst/test_x_2.c:14: test_summ_int - assertion error '42 == answer'
+src/tst/test_x_2.c:15: test_summ_int - expected '42 == answer' to be true
+src/tst/test_x_2.c:22: test_summ_float - expected 4.2, got 4.000000 instead
+src/tst/test_x_2.c:23: test_summ_float - expected 4.2, got 4.0
+src/tst/test_x_2.c:32: test_summ_mix - expected 41, got 42
+-------------------------------------
+Ran 7 tests -> ok (1), fail (6)
+
+==30645== 
+==30645== HEAP SUMMARY:
+==30645==     in use at exit: 0 bytes in 0 blocks
+==30645==   total heap usage: 1 allocs, 1 frees, 1,024 bytes allocated
+==30645== 
+==30645== All heap blocks were freed -- no leaks are possible
+==30645== 
+==30645== For counts of detected and suppressed errors, rerun with: -v
+==30645== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+Makefile:57: recipe for target 'test' failed
+make: *** [test] Error 1
 ```
-
-## `test_x_1_mu.h`
-
-```c
-// AUTOGENERATED test_x_1_mu.h -> to '#include' in test_x_1.c
-
-// test functions
-
-void test_xyz(void);
-
-// test runner
-
-void
-mu_run_tests(void)
-{
-    mu_verify(test_xyz);
-}
-```
-
-`mu_header` collects all `void test_<name>(void)` test functions and creates
-a `test_<name>_mu.h` header file, containing:
-- all test function declarations, and
-- the `mu_run_tests()` containing the calls to each test function
-
-A test function signature is `void test_xyz(void)`.  The macro's used in the
-test function keep track of succes/failure's.  A test runner returns failure
-if 1 or more (mu macro) tests failed.
-
-## Makefile
-
-The Makefile collects all test runners names based on the `test_<name>.c`
-naming convention.  Running just `make` will run all test runners, running
-a single test is done by prepending 'just\_' to the test runners' name, e.g.
-`make just_test_x_1`.
-
-
-```make
-# The test runners are named 'test_<name>.c'
-
-test_cfiles=$(sort $(wildcard test_*.c))
-test_hfiles=$(test_cfiles:.c=_mu.h)
-test_runners=$(test_cfiles:.c=)
-
-# run *all* test runners
-# - remove the ';' to stop make'ing after a test runner fails
-
-test: $(test_runners)
-	@$(foreach test, $(test_runners), ./$(test);)
-
-# `make just_test_<name>', runs a single test_<name>
-# - a bit clumsy
-
-$(test_runners:%=just_%): just_%: %
-	-./$<
-```
-
-The `minunit.h` contains a boiler plate `main()` that simply calls a standard
-`mu_run_tests()`.  In order to avoid multiple mains, when building a test
-runner, a stripped version of TEST is used:
-
-```make
-# generate a test runners' test_<name>_mu.h header file
-# - this contains generated mu_run_tests() function for the test runner
-
-$(test_hfiles): %_mu.h: %.c
-	./mu_header $*
-
-# strip main from x, the test runner provides 'main'
-
-$(test_runners): %: minunit.h %_mu.h %.o ${TEST}.o
-	strip -N main ${TEST}.o -o ${TEST}_stripped.o
-	${CC} ${CFLAGS} $@.o ${TEST}_stripped.o -o $@
-```
-

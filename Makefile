@@ -1,8 +1,8 @@
-# Makefile for libipt.so
+# Makefile for x.so
 MAJOR=1
 MINOR=0.1
 VERSION=$(MAJOR).$(MINOR)
-TGT=libipt.so.$(VERSION)
+TGT=libx.so.$(VERSION)
 
 SDIR=src
 UDIR=src/tst
@@ -70,7 +70,7 @@ $(MU_O): $(BDIR)/%.o: $(UDIR)/%.c $(BDIR)/%_mu.h $(SDIR)/minunit.h
 
 # build a unit test runner
 $(MU_R): $(TDIR)/%: $(BDIR)/%.o $(BDIR)/$(TGT) $$(@D)/.f
-	$(CC) -L$(BDIR) -Wl,-rpath,.:$(BDIR) $< -o $@ -lipt
+	$(CC) -L$(BDIR) -Wl,-rpath,.:$(BDIR) $< -o $@ -lx
 
 clean:
 	@$(RM) -f bld/* tst/*
