@@ -31,7 +31,7 @@ Individual unit tests targets are derived from the unit test c-files, so `make
 test_x_1` would run just that unit test. Finally `make clean` clears both the
 `bld` and `tst` subdirectories.
 
-The after `make test` (all unit tests ran):
+The tree after `make test` (both unit tests ran):
 
 ```bash
 .
@@ -150,7 +150,7 @@ make: *** [test_x_1] Error 1
 ```
 
 Error messages are formatted along the lines of standard 'efm': `file:line:
-msg`.
+<test_func_name> - msg`.
 
 # Makefile
 
